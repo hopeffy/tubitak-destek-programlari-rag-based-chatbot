@@ -35,14 +35,14 @@ Bu projeyi n8n platformunda çalıştırmak için aşağıdaki adımları takip 
 2. **Proje Dosyasını İndirin**:
    - Bu projeyi GitHub'dan indirmeniz gerekiyor:
      ```bash
-     git clone https://github.com/kullanici-adi/proje-adi.git
+     git clone https://github.com/hopeffy/tubitak-destek-programlari-rag-based-chatbot
      ```
 
 3. **n8n İş Akışını İmport Etme**:
    - GitHub'dan indirdiğiniz proje dosyasındaki `n8n_workflow.json` dosyasını n8n arayüzüne import edin:
      1. n8n arayüzüne gidin.
      2. Sol üst köşede yer alan **"Import"** butonuna tıklayın.
-     3. İndirilen `n8n_workflow.json` dosyasını seçin ve import işlemini tamamlayın.
+     3. İndirilen `Tubitak_Burslar_Chatbot(1).json` dosyasını seçin ve import işlemini tamamlayın.
 
 4. **Veri Kaynağını Yükleyin**:
    - Projede kullanılan TÜBİTAK destek programları ile ilgili PDF dosyalarını ve diğer veri kaynaklarını n8n iş akışınızla uyumlu şekilde sağlayın.
