@@ -1,0 +1,714 @@
+{
+  "name": "Tubitak Burslar Chatbot",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        280
+      ],
+      "id": "ad85ad31-9139-4d43-84b5-388e1d1472ed",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "numberInputs": 7
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        940,
+        160
+      ],
+      "id": "1f271bb4-2242-4510-b8b2-da45106da7bb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        340
+      ],
+      "id": "aa0901d6-8bdf-4bbb-bbad-101a0f5c7800",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2096,
+        "chunkOverlap": 512,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        540
+      ],
+      "id": "f35f14d2-3597-4727-9b4a-fd23ff5a8c4d",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-exp-03-07"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        480
+      ],
+      "id": "4ef84288-52dc-4d7f-9ff3-250244419fdd",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1KK0h5hkhYXV5JZH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-exp-03-07"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        680
+      ],
+      "id": "151ba22a-4159-4574-8c1e-66a1456241ef",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1KK0h5hkhYXV5JZH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Retrieval Component\nApply similarity search on Vector Store using\nembeddings of Query and Document Chunks\nReturn the most k similar chunks",
+        "height": 520,
+        "width": 700
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1500,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "39ec7658-4222-4929-bcb2-e557670dae75",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemPromptTemplate": "Use the following pieces of context to answer the users question.\nIf you don't know the answer, just say that you don't know, don't try to make up an answer.\n----------------\n{context}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+      "typeVersion": 1.4,
+      "position": [
+        1920,
+        -20
+      ],
+      "id": "12aeb111-a2a2-45f0-8aba-01382b02bf52",
+      "name": "Question and Answer Chain",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro-exp-03-25",
+        "options": {
+          "maxOutputTokens": 4096,
+          "topK": 32
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        180
+      ],
+      "id": "152786e2-8c9a-4bcc-8236-58e256ab0d83",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "1KK0h5hkhYXV5JZH",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "authentication": "basicAuth",
+        "initialMessages": "Merhaba! TÜBİTAK destek programları hakkında sorularınız mı var? Bana sorun, PDF’leri tarayarak en doğru cevabı getireyim!",
+        "options": {
+          "allowedOrigins": "*",
+          "allowFileUploads": false,
+          "inputPlaceholder": "Sorunuzu yazın..",
+          "responseMode": "lastNode",
+          "subtitle": "TÜBİTAK destek programlarıyla ilgili merak ettiklerinizi sorun! Sistemimiz, resmi PDF dokümanlarını tarayarak size en doğru bilgiyi sunar.",
+          "title": "TUBİTAK DESTEK RPOGRAMLARI   SORU-CEVAP SİSTEMİ ",
+          "customCss": ":root {\n  /* Colors */\n  --chat--color-primary: #e74266;\n  --chat--color-primary-shade-50: #db4061;\n  --chat--color-primary-shade-100: #cf3c5c;\n  --chat--color-secondary: #20b69e;\n  --chat--color-secondary-shade-50: #1ca08a;\n  --chat--color-white: #ffffff;\n  --chat--color-light: #f2f4f8;\n  --chat--color-light-shade-50: #e6e9f1;\n  --chat--color-light-shade-100: #c2c5cc;\n  --chat--color-medium: #d2d4d9;\n  --chat--color-dark: #101330;\n  --chat--color-disabled: #777980;\n  --chat--color-typing: #404040;\n\n  /* Layout */\n  --chat--spacing: 1rem;\n  --chat--border-radius: 0.5rem;\n  --chat--transition-duration: 0.2s;\n  --chat--font-family: 'Rubik', sans-serif;\n\n  /* Chat Window */\n  --chat--window--width: 420px;\n  --chat--window--height: 650px;\n  --chat--window--top: var(--chat--spacing);\n  --chat--window--right: var(--chat--spacing);\n  --chat--window--z-index: 9999;\n  --chat--window--border: 1px solid var(--chat--color-light-shade-50);\n  --chat--window--border-radius: 1rem;\n  --chat--window--box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);\n\n  /* Header */\n  --chat--header--padding: var(--chat--spacing);\n  --chat--header--background: var(--chat--color-dark);\n  --chat--header--color: var(--chat--color-light);\n  --chat--header--font-size: 1.5rem;\n  --chat--header--border-bottom: 2px solid var(--chat--color-primary);\n\n  /* Messages */\n  --chat--message--font-size: 1rem;\n  --chat--message--padding: var(--chat--spacing);\n  --chat--message--border-radius: 1rem;\n  --chat--message--line-height: 1.5;\n  --chat--message--margin-bottom: var(--chat--spacing);\n  --chat--message--bot--background: var(--chat--color-white);\n  --chat--message--bot--color: var(--chat--color-dark);\n  --chat--message--user--background: var(--chat--color-secondary);\n  --chat--message--user--color: var(--chat--color-white);\n  --chat--messages-list--padding: var(--chat--spacing);\n\n  /* Input Area */\n  --chat--textarea--height: 55px;\n  --chat--input--padding: 1rem;\n  --chat--input--background: var(--chat--color-white);\n  --chat--input--border: 1px solid var(--chat--color-light-shade-100);\n  --chat--input--border-radius: 1rem;\n\n  /* Buttons */\n  --chat--button--background: var(--chat--color-primary);\n  --chat--button--color: var(--chat--color-white);\n  --chat--button--border-radius: 1rem;\n  --chat--button--hover--background: var(--chat--color-primary-shade-50);\n\n  /* Chat Positioning */\n  --chat--window--position: fixed;\n  --chat--window--top: 10vh;\n  --chat--window--right: 5vw;\n}\n\n/* Optimize chat message width */\n.chat-message {\n  max-width: 70%;\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        100
+      ],
+      "id": "1ffe61bd-6fdf-4095-a2a3-f1530c16a938",
+      "name": "When chat message received",
+      "webhookId": "12ec71a7-e4c8-4553-bfb6-6cdb2369eb87",
+      "notesInFlow": false,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "cSNQrxCMG2VNonhf",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Generation Component\nEnter the query\nEncode the query using embedding layer\nRun retrieval component\nSubmit query and k chunks to LLM\nGet the answer",
+        "height": 400,
+        "width": 820
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1460,
+        -100
+      ],
+      "typeVersion": 1,
+      "id": "12b89a44-b4e2-4531-b9f9-a67fd8393ac3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "topK": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.retrieverVectorStore",
+      "typeVersion": 1,
+      "position": [
+        1900,
+        360
+      ],
+      "id": "32e1dc15-8ff4-4538-b2a0-3f6837e65f4d",
+      "name": "Vector Store Retriever"
+    },
+    {
+      "parameters": {
+        "memoryKey": "=vector_store_key"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        500
+      ],
+      "id": "960e4ae9-c53a-4620-be22-4933b6c0da0f",
+      "name": "In-Memory Vector Store1"
+    },
+    {
+      "parameters": {
+        "mode": "insert"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        120
+      ],
+      "id": "b020aa2f-9119-48e7-b9e7-113526626285",
+      "name": "In-Memory Vector Store"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1JG0tJ-TbgyNMKXTCsmFQjYW1xsDsIwyv",
+          "mode": "list",
+          "cachedResultName": "2209-B_Son_Cagri.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1JG0tJ-TbgyNMKXTCsmFQjYW1xsDsIwyv/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        180
+      ],
+      "id": "562f68c7-447c-419e-9bad-2f32e8824976",
+      "name": "2209-B-file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1yIb7d73t1zu9SbVLcOowkeISxLrvET8U",
+          "mode": "list",
+          "cachedResultName": "2209-A_Son_Cagri_ska_revizeli_2.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1yIb7d73t1zu9SbVLcOowkeISxLrvET8U/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        -20
+      ],
+      "id": "a4e74dec-68d4-4e0e-9e33-6cac46c0a225",
+      "name": "2209-A-File",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1Pq4e1cWptdlyeVuaGF1MVQDH4KK6ROaH",
+          "mode": "list",
+          "cachedResultName": "2248_Cagri_Duyurusu_2024.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1Pq4e1cWptdlyeVuaGF1MVQDH4KK6ROaH/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        580
+      ],
+      "id": "750f858a-3998-4106-b3c9-5480992bef16",
+      "name": "2248-file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1gPDbuVEeKsYoo4Tbajo7-VR3l1AXMQl2",
+          "mode": "list",
+          "cachedResultName": "2205_Cagri_Duyurusu_07-10-2024.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1gPDbuVEeKsYoo4Tbajo7-VR3l1AXMQl2/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        380
+      ],
+      "id": "8c47220d-9b51-4b62-b3c9-c6ebc5f9369f",
+      "name": "2205-file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1JFzhV9ZNCrn62_rSjNRITdYkK6FNNJDA",
+          "mode": "list",
+          "cachedResultName": "bicaba_cagri_duyurusu_2023.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1JFzhV9ZNCrn62_rSjNRITdYkK6FNNJDA/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        800
+      ],
+      "id": "730f8958-2b89-41cd-8037-c3badf706d79",
+      "name": "bicaba-cagrı",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1hgC67JkB-UaTV2EfH4KaphgH8ssbfQxi",
+          "mode": "list",
+          "cachedResultName": "bicaba_rehber.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1hgC67JkB-UaTV2EfH4KaphgH8ssbfQxi/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        980
+      ],
+      "id": "14de21f3-83eb-4f71-8bfd-d66d9330401c",
+      "name": "bicaba-rehber",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "https://drive.google.com/file/d/1rFjTXagrZPBIAHLJLNfrvrIJRZoDxsg3/view?usp=drive_link",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        400,
+        1160
+      ],
+      "id": "17c3d9c1-aae1-4200-a7c4-f7694d8e266b",
+      "name": "star",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ip7mpKsLJp2cCUxt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Documents Preparation\nLoad documents using HTTP/GET or Google Drive.\nSplit each document into chunks.\nEncode the chunks using Embeddings Layer. (I use Gemini 2.0 API)\nStore the chunk embeddings in a Vector Store",
+        "height": 1480,
+        "width": 1540
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        -100
+      ],
+      "typeVersion": 1,
+      "id": "29fd76c6-ab6d-44eb-a24b-4ee751c6328c",
+      "name": "Sticky Note",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "fromJson",
+        "binaryPropertyName": "=response.text {{ $json.response.text }}",
+        "destinationKey": "={{$json.response.text}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2840,
+        -20
+      ],
+      "id": "f22d8018-83c3-4ce7-8b88-4b7c86660f57",
+      "name": "Extract from File",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "// Extract the text from the JSON response\nconst responseData = $input.all()[0].json;\n\nif (responseData && responseData.response && responseData.response.text) {\n  // Replace markdown formatting (optional) and return clean text\n  const cleanText = responseData.response.text\n    .replace(/\\*\\*/g, '') // Remove bold (**) formatting if desired\n    .replace(/\\n/g, '<br>'); // Convert newlines to HTML line breaks (optional)\n\n  return {\n    json: {\n      cleanText: cleanText\n    },\n    // For plaintext output (alternative)\n    plaintext: cleanText.replace(/<br>/g, '\\n') // Revert <br> to \\n if needed\n  };\n} else {\n  return {\n    json: {\n      error: \"No valid text found in the response.\"\n    }\n  };\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2400,
+        0
+      ],
+      "id": "32a11abb-46ea-4a21-8b16-8c40d8dde7bb",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "2209-A-File",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "2209-B-file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "2205-file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "2248-file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "bicaba-cagrı",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "bicaba-rehber",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "star",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "In-Memory Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "In-Memory Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "In-Memory Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "In-Memory Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Retriever": {
+      "ai_retriever": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_retriever",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "In-Memory Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Retriever",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2209-B-file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "2209-A-File": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2205-file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "2248-file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "bicaba-cagrı": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "bicaba-rehber": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "star": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "Question and Answer Chain": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "BVnj2K21ii8H1xzp"
+  },
+  "versionId": "74c4550d-8d80-41c7-884b-02d297656171",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9c3f15e77295e42eb9e1280623d9e596af2146dcd74aadb37c4c372aafac529d"
+  },
+  "id": "BVnj2K21ii8H1xzp",
+  "tags": []
+}
